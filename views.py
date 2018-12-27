@@ -2,6 +2,16 @@ from flask import Flask
 
 from models import Category, Item
 
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship, sessionmaker
+from sqlalchemy import create_engine
+
+engine = create_engine('sqlite:///catalog.db')
+
+Base.metadata.bind = engine
+DBSession = sessionmaker(bind=engine)
+session = DBSession()
+
 app = Flask(__name__)
 
 #Home Page, shows all categories, and newest items
