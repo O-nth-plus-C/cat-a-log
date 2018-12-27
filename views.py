@@ -1,5 +1,7 @@
 from flask import Flask
 
+from models import Category, Item
+
 app = Flask(__name__)
 
 #Home Page, shows all categories, and newest items
