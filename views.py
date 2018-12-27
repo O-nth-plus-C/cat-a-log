@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 
 from models import Category, Item
 
@@ -18,12 +18,17 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/catalog')
 def show_catalog():
-    return 'This will show the main catalog page, with categories, and newest.'
+    #return 'This will show the main catalog page, with categories, and newest.'
+    return render_template('catalog.html')
 
 #Category Page, shows all items in category
 @app.route('/catalog/<string:category>')
 def show_category(category):
     return 'This will show the page for a category: %s.' % category
+
+#New Category page
+@app.route('/catalog/add_category')
+    return render_template('add_category.html') 
 
 #Item page
 @app.route('/catalog/<string:category>/<string:item>')
