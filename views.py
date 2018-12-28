@@ -19,7 +19,8 @@ app = Flask(__name__)
 @app.route('/catalog')
 def show_catalog():
     #return 'This will show the main catalog page, with categories, and newest.'
-    return render_template('catalog.html')
+    catalog = session.query(Category).all()
+    return render_template('catalog.html', catalog=catalog)
 
 #Category Page, shows all items in category
 @app.route('/catalog/<string:category>')

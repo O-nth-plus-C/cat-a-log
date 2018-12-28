@@ -1,7 +1,23 @@
  <html>
  <head>
-
  </head>
  <body>
+   <h1>Categories</h1>
+
+   {% if catalog !=[]: %}
+     <a href='{{url_for('add_category')}}'>Add Category</a>
+     <br><br>
+
+     {% for c in catalog %}
+
+       <a href='{{url_for('show_category', category=c.category_name)}}'>{{c.category_name}}</a>
+       <br><br>
+     {% endfor %}
+
+  {% else %}
+     <p>There are no categories</p>
+  <br><br>
+  <a href='{{url_for('add_category')}}'>Add Category </a>
+  {%endif%}
  </body>
  </html>
