@@ -1,4 +1,4 @@
-from sqlalchemy import Column,Integer,String
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy import create_engine
@@ -19,11 +19,11 @@ class Item(Base):
   item_price = Column(String)
   item_description = Column(String)
   item_image = Column(String)
-  
+
   category_id = Column(Integer, ForeignKey('categories.id'))
   category = relationship(Category)
 
-engine = create_engine('sqlite:///restaurants.db')
+engine = create_engine('sqlite:///catalog.db')
 
 
 Base.metadata.create_all(engine)

@@ -1,6 +1,6 @@
 from flask import Flask, render_template, url_for, request, redirect
 
-from models import Category, Item
+from models import Base, Category, Item
 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
