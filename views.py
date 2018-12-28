@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for, request, redirect
 
 from models import Category, Item
 
@@ -27,8 +27,15 @@ def show_category(category):
     return 'This will show the page for a category: %s.' % category
 
 #New Category page
-@app.route('/catalog/add_category')
-    return render_template('add_category.html') 
+@app.route('/catalog/add_category', methods=['GET','POST'])
+def add_category():
+    if request.method == 'POST':
+        newCategory = Category(category_name = request.form['name'], category_image = request.form['image'])
+        session.add(newCategory)
+        session.commit()
+        return redirect(url_for('show_catalog'))
+    else:
+        return render_template('add_category.html')
 
 #Item page
 @app.route('/catalog/<string:category>/<string:item>')
