@@ -72,9 +72,22 @@ def show_item(category, item):
     return 'This will be the item page for: %s %s.' % (category, item)
 
 #Page to Add New item
-@app.route('/catalog/add_item')
-def add_item():
-    return 'This will be the page to add a new item.'
+@app.route('/catalog/<int:category_id>/add_item', methods=['GET','POST'])
+def add_item(category_id):
+    if request.method == 'POST':
+        newItem = Item(
+        item_name = request.form['name'],
+        item_description = request.form['description'],
+        item_price = request.form['price'],
+        item_image = request.form['image'],
+        category_id = category_id
+        )
+        session.add(newItem)
+        session.commit()
+        return redirect(url_for('show_category', category_id=category_id))
+    else:
+        category = session.query(Category).filter_by(id=category_id).one()
+        return render_template('add_item.html', category=category)
 
 #Page to Edit item
 @app.route('/catalog/<string:category>/<string:item>/edit')
