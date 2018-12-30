@@ -63,7 +63,8 @@ def edit_category(category_id):
 @app.route('/catalog/<int:category_id>')
 def show_category(category_id):
     category = session.query(Category).filter_by(id = category_id).one()
-    return render_template('category.html', category=category)
+    items = session.query(Item).filter_by(category_id = category_id).all()
+    return render_template('category.html', category=category, items = items)
 
 #Item page
 @app.route('/catalog/<string:category>/<string:item>')
