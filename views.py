@@ -22,11 +22,6 @@ def show_catalog():
     catalog = session.query(Category).all()
     return render_template('catalog.html', catalog=catalog)
 
-#Category Page, shows all items in category
-@app.route('/catalog/<int:category_id>')
-def show_category(category_id):
-    return 'This will show the page for a category: %s.' % category_id
-
 #New Category page
 @app.route('/catalog/add_category', methods=['GET','POST'])
 def add_category():
@@ -49,7 +44,6 @@ def delete_category(category_id):
     else:
         return render_template('delete_category.html', category=category_to_delete)
 
-
 #Edit Category Page
 @app.route('/catalog/<int:category_id>/edit', methods = ['GET','POST'])
 def edit_category(category_id):
@@ -64,6 +58,13 @@ def edit_category(category_id):
         return redirect(url_for('show_catalog'))
     else:
         return render_template('edit_category.html', category = category_to_edit)
+
+#Category Page, shows all items in category
+@app.route('/catalog/<int:category_id>')
+def show_category(category_id):
+    category = session.query(Category).filter_by(id = category_id).one()
+    return render_template('category.html', category=category)
+
 #Item page
 @app.route('/catalog/<string:category>/<string:item>')
 def show_item(category, item):
