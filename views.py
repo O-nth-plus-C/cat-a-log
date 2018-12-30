@@ -4,9 +4,10 @@ from models import Base, Category, Item
 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
+from sqlalchemy.pool import SingletonThreadPool
 from sqlalchemy import create_engine
 
-engine = create_engine('sqlite:///catalog.db')
+engine = create_engine('sqlite:///catalog.db?check_same_thread=False')
 
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
@@ -18,14 +19,13 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/catalog')
 def show_catalog():
-    #return 'This will show the main catalog page, with categories, and newest.'
     catalog = session.query(Category).all()
     return render_template('catalog.html', catalog=catalog)
 
 #Category Page, shows all items in category
-@app.route('/catalog/<string:category>')
-def show_category(category):
-    return 'This will show the page for a category: %s.' % category
+@app.route('/catalog/<int:category_id>')
+def show_category(category_id):
+    return 'This will show the page for a category: %s.' % category_id
 
 #New Category page
 @app.route('/catalog/add_category', methods=['GET','POST'])
@@ -38,6 +38,32 @@ def add_category():
     else:
         return render_template('add_category.html')
 
+#Delete Category Page
+@app.route('/catalog/<int:category_id>/delete', methods = ['GET','POST'])
+def delete_category(category_id):
+    category_to_delete = session.query(Category).filter_by(id = category_id).one()
+    if request.method == 'POST':
+        session.delete(category_to_delete)
+        session.commit()
+        return redirect(url_for('show_catalog'))
+    else:
+        return render_template('delete_category.html', category=category_to_delete)
+
+
+#Edit Category Page
+@app.route('/catalog/<int:category_id>/edit', methods = ['GET','POST'])
+def edit_category(category_id):
+    category_to_edit = session.query(Category).filter_by(id = category_id).one()
+    if request.method == 'POST':
+        if request.form['name']:
+            category_to_edit.category_name = request.form['name']
+        if request.form['image']:
+            category_to_edit.category_image = request.form['image']
+        session.add(category_to_edit)
+        session.commit()
+        return redirect(url_for('show_catalog'))
+    else:
+        return render_template('edit_category.html', category = category_to_edit)
 #Item page
 @app.route('/catalog/<string:category>/<string:item>')
 def show_item(category, item):
