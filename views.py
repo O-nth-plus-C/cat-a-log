@@ -67,9 +67,9 @@ def show_category(category_id):
     return render_template('category.html', category=category, items = items)
 
 #Item page
-@app.route('/catalog/<string:category>/<string:item>')
-def show_item(category, item):
-    return 'This will be the item page for: %s %s.' % (category, item)
+@app.route('/catalog/<int:category_id>/<int:item_id>')
+def show_item(category_id, item_id):
+    return 'This will be the item page for: %s %s.' % (category_id, item_id)
 
 #Page to Add New item
 @app.route('/catalog/<int:category_id>/add_item', methods=['GET','POST'])
@@ -90,9 +90,23 @@ def add_item(category_id):
         return render_template('add_item.html', category=category)
 
 #Page to Edit item
-@app.route('/catalog/<string:category>/<string:item>/edit')
-def edit_item(category, item):
-    return 'This will be the page to edit item: %s %s.' % (category, item)
+@app.route('/catalog/<int:category_id>/<int:item_id>/edit', methods = ['GET','POST'])
+def edit_item(category_id, item_id):
+    editedItem = session.query(Item).filter_by(item_id = item_id)
+    if request.method = 'POST':
+        if request.form['name']:
+            editedItem.item_name = request.form['name']
+        if request.form['description']:
+            editedItem.item_description = request.form['description']
+        if request.form['image']:
+            editedItem.item_image = request.form['image']
+        if request.form['price']:
+            editedItem.item_image = request.form['price']
+        session.add(editedItem)
+        session.commit()
+        return redirect(url_for('show_category', category_id = category_id))
+    else:
+        return render_template('edit_item.html', item = editedItem)
 
 #Page to Delete Item
 @app.route('/catalog/<string:category>/<string:item>/delete')
