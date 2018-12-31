@@ -110,9 +110,15 @@ def edit_item(category_id, item_id):
         return render_template('edit_item.html', item = editedItem)
 
 #Page to Delete Item
-@app.route('/catalog/<int:category_id>/<int:item_id>/delete')
+@app.route('/catalog/<int:category_id>/<int:item_id>/delete', methods = ['GET','POST'])
 def delete_item(category_id, item_id):
-    return 'This will be the page to delete item: %s %s.' % (category_id, item_id)
+    deletedItem = session.query(Item).filter_by(id = item_id).one()
+    if request.method == 'POST':
+        session.delete(deletedItem)
+        session.commit()
+        return redirect(url_for('show_category', category_id = category_id))
+    else:
+        return render_template('delete_item.html', item = deletedItem)
 
 #Create New User
 @app.route('/catalog/add_user')
