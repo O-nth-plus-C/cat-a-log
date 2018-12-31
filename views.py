@@ -92,8 +92,8 @@ def add_item(category_id):
 #Page to Edit item
 @app.route('/catalog/<int:category_id>/<int:item_id>/edit', methods = ['GET','POST'])
 def edit_item(category_id, item_id):
-    editedItem = session.query(Item).filter_by(item_id = item_id)
-    if request.method = 'POST':
+    editedItem = session.query(Item).filter_by(id = item_id).one()
+    if request.method == 'POST':
         if request.form['name']:
             editedItem.item_name = request.form['name']
         if request.form['description']:
@@ -104,7 +104,7 @@ def edit_item(category_id, item_id):
             editedItem.item_image = request.form['price']
         session.add(editedItem)
         session.commit()
-        return redirect(url_for('show_category', category_id = category_id))
+        return redirect(url_for('show_item', category_id = category_id, item_id = item_id))
     else:
         return render_template('edit_item.html', item = editedItem)
 
