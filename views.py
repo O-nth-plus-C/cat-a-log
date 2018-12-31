@@ -69,7 +69,8 @@ def show_category(category_id):
 #Item page
 @app.route('/catalog/<int:category_id>/<int:item_id>')
 def show_item(category_id, item_id):
-    return 'This will be the item page for: %s %s.' % (category_id, item_id)
+    item = session.query(Item).filter_by(id = item_id).one()
+    return render_template('item.html', item = item)
 
 #Page to Add New item
 @app.route('/catalog/<int:category_id>/add_item', methods=['GET','POST'])
@@ -109,9 +110,9 @@ def edit_item(category_id, item_id):
         return render_template('edit_item.html', item = editedItem)
 
 #Page to Delete Item
-@app.route('/catalog/<string:category>/<string:item>/delete')
-def delete_item(category, item):
-    return 'This will be the page to delete item: %s %s.' % (category, item)
+@app.route('/catalog/<int:category_id>/<int:item_id>/delete')
+def delete_item(category_id, item_id):
+    return 'This will be the page to delete item: %s %s.' % (category_id, item_id)
 
 #Create New User
 @app.route('/catalog/add_user')
