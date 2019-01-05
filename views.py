@@ -72,7 +72,7 @@ def edit_category(category_id):
     if 'username' not in login_session:
         return redirect ('/catalog/sign_in')
     category_to_edit = session.query(Category).filter_by(id = category_id).one()
-    if category_to_delete.user_id != login_session['user_id']:
+    if category_to_edit.user_id != login_session['user_id']:
         return "<script>function myFunction() {alert('You are not the owner of this category. Please use the back button.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
         if request.form['name']:
@@ -99,7 +99,10 @@ def show_category(category_id):
 @app.route('/catalog/<int:category_id>/<int:item_id>')
 def show_item(category_id, item_id):
     item = session.query(Item).filter_by(id = item_id).one()
-    return render_template('item.html', item = item)
+    if 'username' not in login_session:
+        return render_template('public_item.html', item=item)
+    else:
+        return render_template('item.html', item = item)
 
 #Page to Add New item
 @app.route('/catalog/<int:category_id>/add_item', methods=['GET','POST'])
@@ -125,7 +128,11 @@ def add_item(category_id):
 #Page to Edit item
 @app.route('/catalog/<int:category_id>/<int:item_id>/edit', methods = ['GET','POST'])
 def edit_item(category_id, item_id):
+    if 'username' not in login_session:
+        return redirect('catalog/sign_in')
     editedItem = session.query(Item).filter_by(id = item_id).one()
+    if editedItem.user_id != login_session['user_id']:
+        return "<script>function myFunction() {alert('You are not the owner of this item. Please use the back button.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
         if request.form['name']:
             editedItem.item_name = request.form['name']
@@ -144,7 +151,11 @@ def edit_item(category_id, item_id):
 #Page to Delete Item
 @app.route('/catalog/<int:category_id>/<int:item_id>/delete', methods = ['GET','POST'])
 def delete_item(category_id, item_id):
+    if 'username' not in login_session:
+        return redirect('catalog/sign_in')
     deletedItem = session.query(Item).filter_by(id = item_id).one()
+    if deletedItem.user_id != login_session['user_id']:
+        return "<script>function myFunction() {alert('You are not the owner of this item. Please use the back button.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
         session.delete(deletedItem)
         session.commit()
