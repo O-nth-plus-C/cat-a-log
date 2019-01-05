@@ -1,0 +1,23 @@
+<html>
+<head>
+</head>
+<body>
+  <h1>Categories</h1>
+
+  {% if catalog !=[]: %}
+
+    {% for c in catalog %}
+
+      <a href='{{url_for('show_category', category_id=c.id)}}'>{{c.category_name}}</a>
+      <br><br>
+
+    {% endfor %}
+
+ {% else %}
+ 
+    <p>There are no categories</p>
+    <br><br>
+
+ {%endif%}
+</body>
+</html>

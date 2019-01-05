@@ -3,7 +3,7 @@ from flask import session as login_session
 
 import random, string
 
-from models import Base, Category, Item #User
+from models import Base, Category, Item, User
 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
@@ -16,6 +16,7 @@ import httplib2
 import json
 from flask import make_response
 import requests
+
 
 CLIENT_ID = json.loads(open('client_secrets.json','r').read())['web']['client_id']
 APPLICATION_NAME = "Cat-a-log"
@@ -32,7 +33,10 @@ app = Flask(__name__)
 @app.route('/catalog')
 def show_catalog():
     catalog = session.query(Category).all()
-    return render_template('catalog.html', catalog=catalog)
+    if 'username' not in login_session:
+        return render_template('public_catalog.html', catalog=catalog)
+    else:
+        return render_template('catalog.html', catalog=catalog)
 
 #New Category page
 @app.route('/catalog/add_category', methods=['GET','POST'])
@@ -185,6 +189,7 @@ def gconnect():
     if stored_credentials is not None and gplus_id == stored_gplus_id:
         response = make_response(json.dumps('Current user is already connected.'), 200)
         response.headers['Content-Type'] = 'application/json'
+        return response
 
     #Store the token in the session for later use.
     login_session['credentials'] = credentials
@@ -197,7 +202,7 @@ def gconnect():
 
     data = answer.json()
 
-    login_session['username'] = data['name']
+    login_session['username'] = data['email']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
@@ -224,7 +229,7 @@ def gdisconnect():
     #Only disconnect a connected userself.
     credentials = login_session.get('credentials')
     if credentials is None:
-        response - make_response(json.dumps('Current user not connected'), 401)
+        response = make_response(json.dumps('Current user not connected'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
     #Execute HTTP GET request to revoke current token.
@@ -265,8 +270,7 @@ def sign_out():
 #Helper Functions
 
 def createUser(login_session):
-    newUser = User(name=login_session['username'], email=login_session[
-                   'email'], picture=login_session['picture'])
+    newUser = User(name=login_session['username'], email=login_session['email'])
     session.add(newUser)
     session.commit()
     user = session.query(User).filter_by(email=login_session['email']).one()
