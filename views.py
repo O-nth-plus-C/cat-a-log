@@ -41,8 +41,10 @@ def show_catalog():
 #New Category page
 @app.route('/catalog/add_category', methods=['GET','POST'])
 def add_category():
+    if 'username' not in login_session:
+        return redirect ('/catalog/sign_in')
     if request.method == 'POST':
-        newCategory = Category(category_name = request.form['name'], category_image = request.form['image'])
+        newCategory = Category(category_name = request.form['name'], category_image = request.form['image'], user_id = login_session['user_id'])
         session.add(newCategory)
         session.commit()
         return redirect(url_for('show_catalog'))
@@ -52,7 +54,11 @@ def add_category():
 #Delete Category Page
 @app.route('/catalog/<int:category_id>/delete', methods = ['GET','POST'])
 def delete_category(category_id):
+    if 'username' not in login_session:
+        return redirect ('/catalog/sign_in')
     category_to_delete = session.query(Category).filter_by(id = category_id).one()
+    if category_to_delete.user_id != login_session['user_id']:
+        return "<script>function myFunction() {alert('You are not the owner of this category. Please use the back button.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
         session.delete(category_to_delete)
         session.commit()
@@ -63,7 +69,11 @@ def delete_category(category_id):
 #Edit Category Page
 @app.route('/catalog/<int:category_id>/edit', methods = ['GET','POST'])
 def edit_category(category_id):
+    if 'username' not in login_session:
+        return redirect ('/catalog/sign_in')
     category_to_edit = session.query(Category).filter_by(id = category_id).one()
+    if category_to_delete.user_id != login_session['user_id']:
+        return "<script>function myFunction() {alert('You are not the owner of this category. Please use the back button.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
         if request.form['name']:
             category_to_edit.category_name = request.form['name']
@@ -80,7 +90,10 @@ def edit_category(category_id):
 def show_category(category_id):
     category = session.query(Category).filter_by(id = category_id).one()
     items = session.query(Item).filter_by(category_id = category_id).all()
-    return render_template('category.html', category=category, items = items)
+    if 'username' not in login_session:
+        return render_template('public_category.html', category=category, items = items)
+    else:
+        return render_template('category.html', category=category, items = items)
 
 #Item page
 @app.route('/catalog/<int:category_id>/<int:item_id>')
