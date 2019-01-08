@@ -7,11 +7,11 @@
     <meta name="description" content="Cat-a-log">
     <title></title>
 
-    <link rel = "stylesheet" href ="pure-release-1.0.0/pure-min.css" >
+    <link rel ="stylesheet" type = "text/css" href ="{{ url_for('static', filename='styles/pure-release-1.0.0/pure-min.css')}}" >
 
 
 
-    <link rel="stylesheet" href="side-menu.css">
+    <link rel ="stylesheet" type = "text/css" href ="{{ url_for('static', filename='styles/side-menu.css')}}" >
 
 
 </head>
@@ -39,6 +39,8 @@
 
                   <li class="pure-menu-item"><a href="{{url_for('show_category', category_id=c.id)}}" class="pure-menu-link">{{c.category_name}}</a></li>
                   {% endfor %}
+                {% endif%}
+
             </ul>
         </div>
     </div>
@@ -86,7 +88,7 @@
 
 
 
-<script src="/ui.js"></script>
+<script src="{{url_for('static', filename="styles/ui.js")}}"></script>
 
 </body>
 </html>
