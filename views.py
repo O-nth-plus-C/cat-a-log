@@ -90,19 +90,22 @@ def edit_category(category_id):
 def show_category(category_id):
     category = session.query(Category).filter_by(id = category_id).one()
     items = session.query(Item).filter_by(category_id = category_id).all()
+    catalog = session.query(Category).all()
     if 'username' not in login_session:
-        return render_template('public_category.html', category=category, items = items)
+        return render_template('public_category.html', category=category, items = items, catalog=catalog)
     else:
-        return render_template('category.html', category=category, items = items)
+        return render_template('category.html', category=category, items = items, catalog=catalog)
 
 #Item page
 @app.route('/catalog/<int:category_id>/<int:item_id>')
 def show_item(category_id, item_id):
     item = session.query(Item).filter_by(id = item_id).one()
+    category = session.query(Category).filter_by(id = category_id).one()
+    catalog = session.query(Category).all()
     if 'username' not in login_session:
-        return render_template('public_item.html', item=item)
+        return render_template('public_item.html', item=item, category=category, catalog=catalog)
     else:
-        return render_template('item.html', item = item)
+        return render_template('item.html', item = item, category=category, catalog=catalog)
 
 #Page to Add New item
 @app.route('/catalog/<int:category_id>/add_item', methods=['GET','POST'])
@@ -270,9 +273,10 @@ def gdisconnect():
         del login_session['email']
         del login_session['picture']
 
-        response = make_response(json.dumps('Successfully disconnected.'), 200)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+        #response = make_response(json.dumps('Successfully disconnected.'), 200)
+        #response.headers['Content-Type'] = 'application/json'
+        #return response
+        return redirect(url_for('show_catalog'))
     else:
         #For whatever reason, given token was invalid.
         response = make_response(json.dumps('Failed to revoke token for given user'), 400)

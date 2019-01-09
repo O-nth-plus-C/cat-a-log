@@ -1,16 +1,70 @@
-<html>
+
+<!doctype html>
+<html lang="en">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cat-a-log - {{category.category_name}}">
+    <title>Cat-a-log - {{item.item_name}}</title>
+
+    <link rel ="stylesheet" type = "text/css" href ="{{ url_for('static', filename='styles/pure-release-1.0.0/pure-min.css')}}" >
+
+
+
+    <link rel ="stylesheet" type = "text/css" href ="{{ url_for('static', filename='styles/side-menu.css')}}" >
+
 
 </head>
 <body>
-  <h1>{{item.item_name}}</h1>
-  <br>
-  <p>{{item.item_description}}</p>
-  <br>
-  <br>
-  <p>{{item.item_price}}</p>
-  <br>
-  <br>
-  
+
+
+
+
+
+
+<div id="layout">
+    <!-- Menu toggle -->
+    <a href="#menu" id="menuLink" class="menu-link">
+        <!-- Hamburger icon -->
+        <span></span>
+    </a>
+
+    <div id="menu">
+        <div class="pure-menu">
+            <a class="pure-menu-heading" href="{{url_for('sign_in')}}">Sign In</a>
+
+            <ul class="pure-menu-list">
+                {% if catalog !=[] %}
+                  {% for c in catalog %}
+
+                  <li class="pure-menu-item"><a href="{{url_for('show_category', category_id=c.id)}}" class="pure-menu-link">{{c.category_name}}</a></li>
+                  {% endfor %}
+                {% endif%}
+
+            </ul>
+        </div>
+    </div>
+
+    <div id="main">
+        <div class="header">
+            <h1>Cat-a-log</h1>
+            <h2>{{category.category_name}}</h2>
+
+        </div>
+
+        <div class="content">
+            <h2 class="content-subhead">{{item.item_name}} - {{item.item_price}}</h2>
+            <p>
+              {{item.item_description}}
+            </p>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="{{url_for('static', filename="styles/ui.js")}}"></script>
+
 </body>
 </html>

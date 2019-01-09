@@ -38,7 +38,6 @@
                   <li class="pure-menu-item"><a href="{{url_for('show_category', category_id=c.id)}}" class="pure-menu-link">{{c.category_name}}</a></li>
                   {% endfor %}
                 {% endif%}
-                  <li class="pure-menu-item"><a href="{{url_for('add_category')}}" class="pure-menu-link">Add Category</a>
                   <li class="pure-menu-item"><a href="{{url_for('edit_category', category_id=category.id)}}" class="pure-menu-link">Edit {{category.category_name}}</a>
                   <li class="pure-menu-item"><a href="{{url_for('delete_category', category_id=category.id)}}" class="pure-menu-link">Delete {{category.category_name}}</a>
                   <li class="pure-menu-item"><a href="{{url_for('add_item', category_id=category.id)}}" class="pure-menu-link">Add Item</a>
@@ -56,9 +55,7 @@
         <div class="content">
             {%for i in items%}
             <h2 class="content-subhead">{{i.item_name}} - {{i.item_price}}</h2>
-            <p>
-              {{i.item_description}}
-            </p>
+
             {% endfor %}
         </div>
     </div>
