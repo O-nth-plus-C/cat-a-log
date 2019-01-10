@@ -54,7 +54,7 @@
 
         <div class="content">
             {%for i in items%}
-            <h2 class="content-subhead">{{i.item_name}} - {{i.item_price}}</h2>
+            <h2 class="content-subhead"><a href="{{url_for('show_item', item_id=i.id, category_id=category.id)}}">{{i.item_name}} - {{i.item_price}}</a></h2>
             {%endfor%}
         </div>
     </div>
