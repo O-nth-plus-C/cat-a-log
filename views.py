@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect, flash
+from flask import Flask, render_template, url_for, request, redirect, flash, jsonify
 from flask import session as login_session
 
 import random, string
@@ -27,6 +27,23 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 app = Flask(__name__)
+
+#JSON API Routes
+@app.route('/catalog/<int:category_id>/JSON')
+def categoryJSON(category_id):
+    category = session.query(Category).filter_by(id = category_id).one()
+    return jsonify(category.serialize)
+
+@app.route('/catalog/<int:category_id>/JSON_ALL')
+def categoryJSON_ALL(category_id):
+    category = session.query(Category).filter_by(id = category_id).one()
+    items = session.query(Item).filter_by(category_id = category_id).all()
+    return jsonify(Items=[i.serialize for i in items])
+
+@app.route('/catalog/<int:category_id>/<int:item_id>/JSON')
+def itemJSON(category_id, item_id):
+    item = session.query(Item).filter_by(id = item_id).one()
+    return jsonify(item.serialize)
 
 #Home Page, shows all categories, and newest items
 @app.route('/')
