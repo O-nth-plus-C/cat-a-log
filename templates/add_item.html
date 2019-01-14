@@ -50,12 +50,11 @@
 
         </div>
 
-        <div class="content">
-          <form action = '{{url_for('add_item', category_id=category.id)}}' method='POST'>
+        <div class="content" align="center">
+          <form class="pure-form" action = '{{url_for('add_item', category_id=category.id)}}' method='POST'>
             <p>Name:</p>
               <input type='text' size='30' name='name'>
-              <br>
-              <br>
+
             <p>Description:</p>
               <input type='text' size='30' name='description'>
               <br>
@@ -68,10 +67,8 @@
               <input type='text' size='30' name='image'>
               <br>
               <br>
-            <input type='submit' value='Create Item'>
-            <br>
-            <br>
-            <a href='{{url_for('show_category', category_id=category.id)}}'>Cancel</a>
+            <input class="pure-button" type='submit' value='Create Item'>
+            <a class="pure-button" href='{{url_for('show_category', category_id=category.id)}}'>Cancel</a>
         </div>
     </div>
 </div>
