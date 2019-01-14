@@ -133,6 +133,7 @@ def add_item(category_id):
 def edit_item(category_id, item_id):
     if 'username' not in login_session:
         return redirect('catalog/sign_in')
+    category = session.query(Category).filter_by(id = category_id).one()
     editedItem = session.query(Item).filter_by(id = item_id).one()
     if editedItem.user_id != login_session['user_id']:
         return "<script>function myFunction() {alert('You are not the owner of this item. Please use the back button.');}</script><body onload='myFunction()'>"
@@ -149,7 +150,7 @@ def edit_item(category_id, item_id):
         session.commit()
         return redirect(url_for('show_item', category_id = category_id, item_id = item_id))
     else:
-        return render_template('edit_item.html', item = editedItem)
+        return render_template('edit_item.html', item = editedItem, category=category )
 
 #Page to Delete Item
 @app.route('/catalog/<int:category_id>/<int:item_id>/delete', methods = ['GET','POST'])
