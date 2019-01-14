@@ -233,7 +233,9 @@ def edit_item(category_id, item_id):
 def delete_item(category_id, item_id):
     if 'username' not in login_session:
         return redirect('catalog/sign_in')
+
     deletedItem = session.query(Item).filter_by(id=item_id).one()
+
     if deletedItem.user_id != login_session['user_id']:
         return """<script>function myFunction() {alert(
         'You are not the owner of this category. Please use the back button.'
@@ -249,6 +251,7 @@ def delete_item(category_id, item_id):
 # Route to perform google auth for login
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
+    # Validate state parameter
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter'), 401)
         response.headers['Content-Type'] = 'application/json'
@@ -313,7 +316,7 @@ def gconnect():
     login_session['credentials'] = credentials
     login_session['gplus_id'] = gplus_id
 
-    # Get User info
+    # Get User info and add it to login_session
     userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
     params = {'access_token': credentials.access_token, 'alt': 'json'}
     answer = requests.get(userinfo_url, params=params)
@@ -341,7 +344,7 @@ def gconnect():
 # Disconnect - revoke a user's token and reset their login_session
 @app.route('/gdisconnect')
 def gdisconnect():
-    # Only disconnect a connected userself.
+    # Only disconnect a connected user.
     credentials = login_session.get('credentials')
     if credentials is None:
         response = make_response(json.dumps('Current user not connected'), 401)
