@@ -1,20 +1,64 @@
-<html>
+</html>
+<!doctype html>
+<html lang="en">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cat-a-log">
+    <title>Cat-a-log - Add Category</title>
+
+    <link rel ="stylesheet" type = "text/css" href ="{{ url_for('static', filename='styles/pure-release-1.0.0/pure-min.css')}}" >
+    <link rel ="stylesheet" type = "text/css" href ="{{ url_for('static', filename='styles/side-menu.css')}}" >
 
 </head>
 <body>
-  <h1> Add New Category </h1>
 
-  <form action ="{{url_for('add_category')}}" method='POST'>
-    <p>Category Name:</p>
-      <input type='text' size='30' name='name'>
-      <br><br>
+<div id="layout">
+    <!-- Menu toggle -->
+    <a href="#menu" id="menuLink" class="menu-link">
+        <!-- Hamburger icon -->
+        <span></span>
+    </a>
 
-    <p>Image Url:</p>
-    <input type='text' size='30' name='image'>
-    <br><br>
+    <div id="menu">
+        <div class="pure-menu">
+            <a class="pure-menu-heading" href="{{url_for('gdisconnect')}}">Sign Out</a>
 
-    <input type='submit' value='Create Category'>
-    
+            <ul class="pure-menu-list">
+                {% if catalog !=[] %}
+                  {% for c in catalog %}
+
+                  <li class="pure-menu-item"><a href="{{url_for('show_category', category_id=c.id)}}" class="pure-menu-link">{{c.category_name}}</a></li>
+                  {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    <div id="main">
+        <div class="header">
+            <h1>Cat-a-log</h1>
+            <h2>Add New Category</h2>
+
+        </div>
+
+        <div class="content" align="center">
+          <form class="pure-form"action ="{{url_for('add_category')}}" method='POST'>
+            <p>Category Name:</p>
+              <input type='text' size='30' name='name'>
+              <br><br>
+
+            <p>Image Url:</p>
+            <input type='text' size='30' name='image'>
+            <br><br>
+
+            <input class="pure-button" type='submit' value='Create Category'>
+            <a class="pure-button" href='{{url_for('show_catalog')}}'>Cancel</a>
+        </div>
+    </div>
+</div>
+
+<script src="{{url_for('static', filename="styles/ui.js")}}"></script>
+
 </body>
 </html>
