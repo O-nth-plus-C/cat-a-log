@@ -1,15 +1,60 @@
-<html>
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cat-a-log">
+    <title>Cat-a-log - Delete Category</title>
+
+    <link rel ="stylesheet" type = "text/css" href ="{{ url_for('static', filename='styles/pure-release-1.0.0/pure-min.css')}}" >
+    <link rel ="stylesheet" type = "text/css" href ="{{ url_for('static', filename='styles/side-menu.css')}}" >
+
+</head>
 <body>
-<h1> Delete {{category.category_name}}? </h1>
 
-<form action ='{{url_for('delete_category', category_id = category.id)}}' method='post'>
+<div id="layout">
+    <!-- Menu toggle -->
+    <a href="#menu" id="menuLink" class="menu-link">
+        <!-- Hamburger icon -->
+        <span></span>
+    </a>
 
-<br>
+    <div id="menu">
+        <div class="pure-menu">
+            <a class="pure-menu-heading" href="{{url_for('gdisconnect')}}">Sign Out</a>
 
-<input type='submit' value='Delete'>
-<br>
-<br>
-<a href = '{{url_for('show_catalog')}}'> Cancel </a>
-</form>
+            <ul class="pure-menu-list">
+                {% if catalog !=[] %}
+                  {% for c in catalog %}
+
+                  <li class="pure-menu-item"><a href="{{url_for('show_category', category_id=c.id)}}" class="pure-menu-link">{{c.category_name}}</a></li>
+                  {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    <div id="main">
+        <div class="header">
+            <h1>Cat-a-log</h1>
+
+        </div>
+
+        <div class="content" align="center">
+          <h1>Delete {{category.category_name}}?</h1>
+          <form class="pure-form"action ='{{url_for('delete_category', category_id = category.id)}}' method='post'>
+
+          <br>
+
+          <input class = "pure-button" type='submit' value='Delete'>
+          <a class="pure-button" href = '{{url_for('show_catalog')}}'> Cancel </a>
+          </form>
+        </div>
+    </div>
+</div>
+
+<script src="{{url_for('static', filename="styles/ui.js")}}"></script>
+
 </body>
 </html>
