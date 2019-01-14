@@ -211,7 +211,7 @@ def edit_item(category_id, item_id):
         if request.form['image']:
             editedItem.item_image = request.form['image']
         if request.form['price']:
-            editedItem.item_image = request.form['price']
+            editedItem.item_price = request.form['price']
         session.add(editedItem)
         session.commit()
         return redirect(url_for(
