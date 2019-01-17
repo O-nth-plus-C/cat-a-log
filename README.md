@@ -1,5 +1,6 @@
 #Catalog Project
-
+A web application which displays and allows management of items and categories
+from a database, with edit and delete permissions limited to object creators.  
 
 ## How to Use
 Install the following:
