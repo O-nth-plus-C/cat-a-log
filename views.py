@@ -88,9 +88,11 @@ def delete_category(category_id):
         return redirect('/catalog/sign_in')
     category_delete = session.query(Category).filter_by(id=category_id).one()
     if category_delete.user_id != login_session['user_id']:
-        return """<script>function myFunction() {alert(
-        'You are not the owner of this category. Please use the back button.'
-        );}</script><body onload='myFunction()'>"""
+        script = ""
+        script += "<script>function myFunction() {alert('You are not the owner"
+        script += " of this category. Please use the back button.');}</script>"
+        script += "<body onload='myFunction()'>"
+        return script
     if request.method == 'POST':
         session.delete(category_delete)
         session.commit()
@@ -109,9 +111,11 @@ def edit_category(category_id):
         return redirect('/catalog/sign_in')
     category_to_edit = session.query(Category).filter_by(id=category_id).one()
     if category_to_edit.user_id != login_session['user_id']:
-        return """<script>function myFunction() {alert(
-        'You are not the owner of this category. Please use the back button.'
-        );}</script><body onload='myFunction()'>"""
+        script = ""
+        script += "<script>function myFunction() {alert('You are not the owner"
+        script += " of this category. Please use the back button.');}</script>"
+        script += "<body onload='myFunction()'>"
+        return script
     if request.method == 'POST':
         if request.form['name']:
             category_to_edit.category_name = request.form['name']
@@ -196,9 +200,11 @@ def edit_item(category_id, item_id):
     category = session.query(Category).filter_by(id=category_id).one()
     editedItem = session.query(Item).filter_by(id=item_id).one()
     if editedItem.user_id != login_session['user_id']:
-        return """<script>function myFunction() {alert(
-        'You are not the owner of this category. Please use the back button.'
-        );}</script><body onload='myFunction()'>"""
+        script = ""
+        script += "<script>function myFunction() {alert('You are not the owner"
+        script += " of this item. Please use the back button.');}</script>"
+        script += "<body onload='myFunction()'>"
+        return script
     if request.method == 'POST':
         if request.form['name']:
             editedItem.item_name = request.form['name']
@@ -231,9 +237,11 @@ def delete_item(category_id, item_id):
     deletedItem = session.query(Item).filter_by(id=item_id).one()
 
     if deletedItem.user_id != login_session['user_id']:
-        return """<script>function myFunction() {alert(
-        'You are not the owner of this category. Please use the back button.'
-        );}</script><body onload='myFunction()'>"""
+        script = ""
+        script += "<script>function myFunction() {alert('You are not the owner"
+        script += " of this item. Please use the back button.');}</script>"
+        script += "<body onload='myFunction()'>"
+        return script
     if request.method == 'POST':
         session.delete(deletedItem)
         session.commit()
