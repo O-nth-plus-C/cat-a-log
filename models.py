@@ -19,7 +19,6 @@ class Category(Base):
 
     id = Column(Integer, primary_key=True)
     category_name = Column(String)
-    category_image = Column(String)
     user_id = Column(Integer, ForeignKey('users.id'))
     user = relationship(User)
 
@@ -28,7 +27,6 @@ class Category(Base):
         # Returns data in easily serializable format
         return {
             'category_name': self.category_name,
-            'category_image': self.category_image,
             'id': self.id,
             'user_id': self.user_id
             }
@@ -41,7 +39,6 @@ class Item(Base):
     item_name = Column(String)
     item_price = Column(String)
     item_description = Column(String)
-    item_image = Column(String)
 
     category_id = Column(Integer, ForeignKey('categories.id'))
     category = relationship(Category)
@@ -54,7 +51,6 @@ class Item(Base):
         # Returns data in easily serializable format
         return {
             'item_name': self.item_name,
-            'item_image': self.item_image,
             'item_price': self.item_price,
             'item_description': self.item_description,
             'category_id': self.category_id,

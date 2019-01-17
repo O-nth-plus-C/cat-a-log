@@ -72,7 +72,6 @@ def add_category():
     if request.method == 'POST':
         newCategory = Category(
             category_name=request.form['name'],
-            category_image=request.form['image'],
             user_id=login_session['user_id']
             )
         session.add(newCategory)
@@ -116,8 +115,6 @@ def edit_category(category_id):
     if request.method == 'POST':
         if request.form['name']:
             category_to_edit.category_name = request.form['name']
-        if request.form['image']:
-            category_to_edit.category_image = request.form['image']
         session.add(category_to_edit)
         session.commit()
         return redirect(url_for('show_catalog'))
@@ -178,7 +175,6 @@ def add_item(category_id):
             item_name=request.form['name'],
             item_description=request.form['description'],
             item_price=request.form['price'],
-            item_image=request.form['image'],
             category_id=category_id,
             user_id=login_session['user_id']
             )
@@ -208,8 +204,6 @@ def edit_item(category_id, item_id):
             editedItem.item_name = request.form['name']
         if request.form['description']:
             editedItem.item_description = request.form['description']
-        if request.form['image']:
-            editedItem.item_image = request.form['image']
         if request.form['price']:
             editedItem.item_price = request.form['price']
         session.add(editedItem)
