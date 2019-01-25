@@ -20,11 +20,11 @@ import requests
 
 
 CLIENT_ID = json.loads(open(
-    'client_secrets.json', 'r'
+    '/var/www/flaskApp/cat-a-log/client_secrets.json', 'r'
     ).read())['web']['client_id']
 
 APPLICATION_NAME = "Cat-a-log"
-engine = create_engine('sqlite:///catalog.db?check_same_thread=False')
+engine = create_engine('sqlite:////var/www/flaskApp/cat-a-log/catalog.db?check_same_thread=False')
 
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
@@ -412,7 +412,7 @@ def getUserID(email):
         return None
 
 
-if __name__ == '__main__':
-    app.secret_key = 'super_secret_key'
-    app.debug = True
-    app.run(host='0.0.0.0', port=8000)
+#if __name__ == '__main__':
+#    app.secret_key = 'super_secret_key'
+#    app.debug = True
+#    app.run(host='0.0.0.0', port=80)
